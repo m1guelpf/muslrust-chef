@@ -28,9 +28,9 @@ jobs:
         else
           echo "Stable tag found; skipping all build steps"
           # Setting dummy tag evars to prevent steps below from failing
-          echo "TAG1=clux/muslrust:no1" >> $GITHUB_ENV
-          echo "TAG2=clux/muslrust:no2" >> $GITHUB_ENV
-          echo "TAG3=clux/muslrust:no3" >> $GITHUB_ENV
+          echo "TAG1=m1guelpf/muslrust-chef:no1" >> $GITHUB_ENV
+          echo "TAG2=m1guelpf/muslrust-chef:no2" >> $GITHUB_ENV
+          echo "TAG3=m1guelpf/muslrust-chef:no3" >> $GITHUB_ENV
         fi
 
     - name: Build stable image
@@ -40,19 +40,19 @@ jobs:
         load: true
         build-args: |
           CHANNEL=stable
-        tags: clux/muslrust:temp
+        tags: m1guelpf/muslrust-chef:temp
       if: ${{ steps.stablecheck.outputs.BUILD }}
 
     - name: Compute tags
       shell: bash
       run: |
-        docker run clux/muslrust:temp rustc --version
-        RUST_VER="$(docker run clux/muslrust:temp rustc --version | grep -oE "[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]")"
+        docker run m1guelpf/muslrust-chef:temp rustc --version
+        RUST_VER="$(docker run m1guelpf/muslrust-chef:temp rustc --version | grep -oE "[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]")"
         RUST_DATE="$(date +"%Y-%m-%d")"
         RUST_CHANNEL=stable
-        echo "TAG1=clux/muslrust:${RUST_CHANNEL}" >> $GITHUB_ENV
-        echo "TAG2=clux/muslrust:${RUST_VER}-${RUST_CHANNEL}" >> $GITHUB_ENV
-        echo "TAG3=clux/muslrust:${RUST_VER}" >> $GITHUB_ENV
+        echo "TAG1=m1guelpf/muslrust-chef:${RUST_CHANNEL}" >> $GITHUB_ENV
+        echo "TAG2=m1guelpf/muslrust-chef:${RUST_VER}-${RUST_CHANNEL}" >> $GITHUB_ENV
+        echo "TAG3=m1guelpf/muslrust-chef:${RUST_VER}" >> $GITHUB_ENV
       if: ${{ steps.stablecheck.outputs.BUILD }}
 
     - name: Echo tags
@@ -71,7 +71,7 @@ jobs:
       if: github.event_name != 'pull_request'
       uses: docker/login-action@v1
       with:
-        username: clux
+        username: m1g
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: Push image under computed tags
