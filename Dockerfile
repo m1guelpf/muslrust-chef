@@ -120,6 +120,9 @@ RUN curl -sSL https://www.sqlite.org/2022/sqlite-autoconf-$SQLITE_VER.tar.gz | t
     make && make install && \
     cd .. && rm -rf sqlite-autoconf-$SQLITE_VER
 
+# install cargo-chef
+RUN cargo install cargo-chef
+
 # SSL cert directories get overridden by --prefix and --openssldir
 # and they do not match the typical host configurations.
 # The SSL_CERT_* vars fix this, but only when inside this container
